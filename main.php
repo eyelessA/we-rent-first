@@ -1,6 +1,9 @@
 <?php
 
-set_time_limit(6);
+ini_set('max_execution_time', 6);
+
+$startTime = (int)microtime(true);
+$duration = 5;
 
 $redis = new Redis();
 
@@ -8,14 +11,18 @@ try {
     $redis->connect('redis', 6379);
 
     if ($redis->get('lock')) {
-        echo "Код уже идет.\n";
+        echo "Программа уже запущена.\n";
         return;
     }
 
-    $redis->set('lock', 'lock', ['ex' => 5]);
+    $redis->set('lock', 'lock', ['ex' => 6]);
 
     echo "Скрипт начал выполнение...\n";
-    sleep(5);
+
+    while ($startTime + $duration >= (int)microtime(true)) {
+        echo '';
+    }
+
     echo "Скрипт завершил выполнение.\n";
 
 } catch (Exception $e) {
