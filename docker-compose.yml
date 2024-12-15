@@ -1,0 +1,20 @@
+version: "3.5"
+
+services:
+  php:
+    build:
+      context: docker/local/php
+      dockerfile: Dockerfile
+    volumes:
+      -  .:/var/www
+    restart: unless-stopped
+    container_name: we_rent_first_php
+
+  redis:
+    image: redis:6.2-alpine
+    volumes:
+      - ./redis_data:/data
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    container_name: we_rent_first_redis
